@@ -1,0 +1,50 @@
+[
+    {
+        "brand": "Toyota",
+        "model": "Supra",
+        "year": 2020,
+        "price": 47000,
+        "mileage": 29000,
+        "sold": false
+    },
+    {
+        "brand": "Audi",
+        "model": "A6",
+        "year": 2023,
+        "price": 56900,
+        "mileage": 38000,
+        "sold": true
+    },
+    {
+        "brand": "Audi",
+        "model": "RS7",
+        "year": 2019,
+        "price": 66000,
+        "mileage": 118000,
+        "sold": false
+    },
+    {
+        "brand": "Dodge",
+        "model": "Challenger",
+        "year": 2020,
+        "price": 73200,
+        "mileage": 18800,
+        "sold": false
+    },
+    {
+        "brand": "BMW",
+        "model": "M5",
+        "year": 2020,
+        "price": 74900,
+        "mileage": 46000,
+        "sold": false
+    },
+    {
+        "brand": "Chevrolet",
+        "model": "Camaro",
+        "year": 2024,
+        "price": 81000,
+        "mileage": 2900,
+        "sold": false
+    }
+]
