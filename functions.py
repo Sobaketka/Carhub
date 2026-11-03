@@ -4,16 +4,16 @@ import os
 FILEPATH = os.path.join("data", "cars.json")
 
 
-def load_cars():
-    if os.path.getsize(FILEPATH) == 0:
-        return []
-    with open(FILEPATH, "r", encoding="utf-8") as file:
+def get_cars(filepath = FILEPATH):
+    with open(filepath, "r", encoding="utf-8") as file:
+        if os.path.getsize(filepath) == 0:
+            return []
         return json.load(file)
 
 
-def save_cars(cars):
-    with open(FILEPATH, "w", encoding="utf-8") as file:
-        json.dump(cars, file, ensure_ascii=False, indent=4)
+def write_cars(cars_arg, filepath = FILEPATH):
+    with open(filepath, "w", encoding="utf-8") as file:
+        json.dump(cars_arg, file, ensure_ascii=False, indent=4)
 
 
 def print_car(number, car):
@@ -35,3 +35,7 @@ def ask_number(cars):
         print("Такої машини немає")
         return 0
     return number
+
+if __name__ == "__main__":
+    cars = get_cars(FILEPATH)
+    print(cars)

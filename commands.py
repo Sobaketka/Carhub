@@ -1,6 +1,7 @@
 import functions
+import core
 
-def do_help(cars):
+def do_help(cars, argument):
     print("add      - додати машину")
     print("show     - показати всі машини")
     print("edit     - змінити машину")
@@ -18,9 +19,11 @@ def do_help(cars):
     print("exit     - вихід")
 
 
-def do_add(cars):
-    print("Вкажіть: марка модель рік ціна пробіг")
-    data = input("> ").split()
+def do_add(cars, argument):
+    if not argument:
+        print("Вкажіть: марка модель рік ціна пробіг")
+        argument = input("> ")
+    data = argument.split()
 
     if len(data) == 5 and data[2].isdigit() and data[3].isdigit() and data[4].isdigit():
         car = {
@@ -31,14 +34,13 @@ def do_add(cars):
             "mileage": int(data[4]),
             "sold": False
         }
-        cars.append(car)
-        functions.save_cars(cars)
+        cars.add_car(cars, car)
         print("Машину додано")
     else:
-        print("Неправильні дані (рік, ціна, пробіг - числа)")
+        print("Неправильні дані")
 
 
-def do_show(cars):
+def do_show(cars, argument):
     if len(cars) == 0:
         print("Список машин порожній")
     else:
@@ -46,48 +48,58 @@ def do_show(cars):
             functions.print_car(i + 1, cars[i])
 
 
-def do_delete(cars):
-    print("Вкажіть номер машини")
-    number = functions.ask_number(cars)
+def do_delete(cars, argument):
+    if not argument:
+        print("Вкажіть номер машини")
+        argument = input("> ")
 
-    if number != 0:
-        cars.pop(number - 1)
-        functions.save_cars(cars)
-        print("Машину видалено")
+    if argument.isdigit():
+        number = int(argument)
+
+        if 1 <= number <= len(cars):
+            core.delete_car(cars, number)
+            print("Машину видалено")
+        else:
+            print("Такої машини немає")
+    else:
+        print("Номер повинен бути числом")
 
 
-def do_search(cars):
-    print("Вкажіть марку")
-    brand = input("> ")
+def do_search(cars, argument):
+    if not argument:
+        print("Вкажіть марку")
+        argument = input("> ")
 
     found = False
+
     for i in range(len(cars)):
-        if cars[i]["brand"].lower() == brand.lower():
+        if cars[i]["brand"].lower() == argument.lower():
             functions.print_car(i + 1, cars[i])
             found = True
 
-    if found == False:
+    if not found:
         print("Машину не знайдено")
 
 
-def do_edit(cars):
-    print("Вкажіть: номер марка модель рік ціна пробіг")
-    data = input("> ").split()
+def do_edit(cars, argument):
+    if not argument:
+        print("Вкажіть: номер марка модель рік ціна пробіг")
+        argument = input("> ")
+    data = argument.split()
 
     if len(data) == 6 and data[0].isdigit() and data[3].isdigit() and data[4].isdigit() and data[5].isdigit():
         number = int(data[0])
 
-        if number >= 1 and number <= len(cars):
+        if 1 <= number <= len(cars):
             car = {
                 "brand": data[1],
                 "model": data[2],
                 "year": int(data[3]),
                 "price": int(data[4]),
-                "mileage": int(data[5]),
-                "sold": cars[number - 1]["sold"]
+                "mileage": int(data[5])
             }
-            cars[number - 1] = car
-            functions.save_cars(cars)
+
+            core.edit_car(cars, number, car)
             print("Машину змінено")
         else:
             print("Такої машини немає")
@@ -95,80 +107,108 @@ def do_edit(cars):
         print("Неправильні дані")
 
 
-def do_sold(cars):
-    print("Вкажіть номер машини")
-    number = functions.ask_number(cars)
+def do_sold(cars, argument):
+    if not argument:
+        print("Вкажіть номер машини")
+        argument = input("> ")
 
-    if number != 0:
-        if cars[number - 1]["sold"] == True:
-            cars[number - 1]["sold"] = False
-            print("Статус: в наявності")
+    if argument.isdigit():
+        number = int(argument)
+
+        if 1 <= number <= len(cars):
+            core.change_sold(cars, number)
+
+            if cars[number - 1]["sold"]:
+                print("Статус: продано")
+            else:
+                print("Статус: в наявності")
         else:
-            cars[number - 1]["sold"] = True
-            print("Статус: продано")
-        functions.save_cars(cars)
+            print("Такої машини немає")
+    else:
+        print("Номер повинен бути числом")
 
 
-def do_filter(cars):
-    print("Що показати? 1 - в наявності, 2 - продані")
-    choice = input("> ")
+def do_filter(cars, argument):
+    if not argument:
+        print("1 - в наявності, 2 - продані")
+        argument = input("> ")
 
-    if choice == "1" or choice == "2":
+    if argument == "1" or argument == "2":
         found = False
+
         for i in range(len(cars)):
-            if choice == "1" and cars[i]["sold"] == False:
+            if argument == "1" and not cars[i]["sold"]:
                 functions.print_car(i + 1, cars[i])
                 found = True
-            elif choice == "2" and cars[i]["sold"] == True:
+            elif argument == "2" and cars[i]["sold"]:
                 functions.print_car(i + 1, cars[i])
                 found = True
 
-        if found == False:
+        if not found:
             print("Нічого не знайдено")
     else:
         print("Неправильний вибір")
 
 
-def do_info(cars):
-    print("Вкажіть номер машини")
-    number = functions.ask_number(cars)
 
-    if number != 0:
-        car = cars[number - 1]
-        print("Марка:", car["brand"])
-        print("Модель:", car["model"])
-        print("Рік:", car["year"])
-        print("Ціна:", car["price"], "$")
-        print("Пробіг:", car["mileage"], "км")
-        if car["sold"]:
-            print("Статус: продано")
+
+def do_info(cars, argument):
+    if not argument:
+        print("Вкажіть номер машини")
+        argument = input("> ")
+
+    if argument.isdigit():
+        number = int(argument)
+
+        if 1 <= number <= len(cars):
+            car = cars[number - 1]
+
+            print("Марка:", car["brand"])
+            print("Модель:", car["model"])
+            print("Рік:", car["year"])
+            print("Ціна:", car["price"], "$")
+            print("Пробіг:", car["mileage"], "км")
+
+            if car["sold"]:
+                print("Статус: продано")
+            else:
+                print("Статус: в наявності")
         else:
-            print("Статус: в наявності")
+            print("Такої машини немає")
+    else:
+        print("Номер повинен бути числом")
 
 
-def do_range(cars):
-    print("Вкажіть діапазон цін: від до")
-    data = input("> ").split()
+def do_range(cars, argument):
+    if not argument:
+        print("Вкажіть діапазон цін: від до")
+        argument = input("> ")
+
+    data = argument.split()
 
     if len(data) == 2 and data[0].isdigit() and data[1].isdigit():
         low = int(data[0])
         high = int(data[1])
 
         found = False
+
         for i in range(len(cars)):
-            if cars[i]["price"] >= low and cars[i]["price"] <= high:
+            if low <= cars[i]["price"] <= high:
                 functions.print_car(i + 1, cars[i])
                 found = True
 
-        if found == False:
+        if not found:
             print("Нічого не знайдено")
     else:
         print("Неправильні дані")
 
 
-def do_discount(cars):
-    print("Вкажіть: номер знижка(%)")
-    data = input("> ").split()
+def do_discount(cars, argument):
+    if not argument:
+        print("Вкажіть: номер знижка(%)")
+        argument = input("> ")
+
+    data = argument.split()
 
     if len(data) == 2 and data[0].isdigit() and data[1].isdigit():
         number = int(data[0])
@@ -178,33 +218,37 @@ def do_discount(cars):
             print("Такої машини немає")
         elif percent < 1 or percent > 99:
             print("Знижка має бути від 1 до 99")
-        elif cars[number - 1]["sold"] == True:
+        elif cars[number - 1]["sold"]:
             print("Ця машина вже продана")
         else:
             old_price = cars[number - 1]["price"]
             new_price = old_price * (100 - percent) // 100
             cars[number - 1]["price"] = new_price
-            functions.save_cars(cars)
+
+            functions.write_cars(cars)
             print("Ціна:", old_price, "$ ->", new_price, "$")
     else:
         print("Неправильні дані")
 
 
-def do_sort(cars):
+def do_sort(cars, argument):
     for i in range(len(cars)):
         for j in range(len(cars) - 1 - i):
             if cars[j]["price"] > cars[j + 1]["price"]:
                 cars[j], cars[j + 1] = cars[j + 1], cars[j]
-    functions.save_cars(cars)
+
+    functions.write_cars(cars)
     print("Відсортовано за ціною")
 
 
-def do_brands(cars):
+def do_brands(cars, argument):
     counts = {}
+
     for car in cars:
         brand = car["brand"]
+
         if brand in counts:
-            counts[brand] = counts[brand] + 1
+            counts[brand] += 1
         else:
             counts[brand] = 1
 
@@ -215,7 +259,7 @@ def do_brands(cars):
             print(brand, "-", counts[brand])
 
 
-def do_stats(cars):
+def do_stats(cars, argument):
     if len(cars) == 0:
         print("Список машин порожній")
     else:
@@ -224,10 +268,11 @@ def do_stats(cars):
         sold_sum = 0
 
         for car in cars:
-            total_price = total_price + car["price"]
-            if car["sold"] == True:
-                sold_count = sold_count + 1
-                sold_sum = sold_sum + car["price"]
+            total_price += car["price"]
+
+            if car["sold"]:
+                sold_count += 1
+                sold_sum += car["price"]
 
         print("Всього машин:", len(cars))
         print("Продано:", sold_count)
@@ -236,13 +281,18 @@ def do_stats(cars):
         print("Сума продажів:", sold_sum, "$")
 
 
-def do_clear(cars):
-    answer = input("Точно видалити все? (y/n) > ")
-    if answer == "y":
-        cars.clear()
-        functions.save_cars(cars)
+def do_clear(cars, argument):
+    if not argument:
+        argument = input("Точно видалити все? (y/n) > ")
+
+    if argument == "y":
+        core.clear_cars(cars)
         print("Всі машини видалено")
 
+def do_exit(cars, argument):
+    functions.write_cars(cars)
+    print("Збережено")
+    return False
 
 COMMANDS = {
     "help": do_help,
@@ -260,17 +310,23 @@ COMMANDS = {
     "brands": do_brands,
     "stats": do_stats,
     "clear": do_clear,
+    "exit": do_exit,
 }
 
 
-def dispatch(cars, command):
-    if command == "exit":
-        functions.save_cars(cars)
-        print("збережено")
-        return False
+def dispatch(cars, user_action):
+    parts = user_action.strip().split(maxsplit=1)
 
-    if command in COMMANDS:
-        COMMANDS[command](cars)
-    else:
+    if not parts:
+        print("Введіть команду")
+        return True
+
+    command = parts[0]
+    argument = parts[1] if len(parts) > 1 else ""
+    handler = COMMANDS.get(command)
+
+    if handler is None:
         print("Невідома команда (help - список команд)")
-    return True
+        return True
+
+    return handler(cars, argument)
