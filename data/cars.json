@@ -46,5 +46,13 @@
         "price": 81000,
         "mileage": 2900,
         "sold": false
+    },
+    {
+        "brand": "Audi",
+        "model": "R6",
+        "year": 2018,
+        "price": 45100,
+        "mileage": 48900,
+        "sold": false
     }
 ]

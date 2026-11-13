@@ -3,6 +3,9 @@ import argparse
 import sys
 import functions
 import commands
+import click
+import typer
+
 
 
 def repl():
@@ -32,7 +35,7 @@ def build_parser():
         help="Дані автомобіля (марка, модель, рік, ціна, пробіг)"
     )
 
-    p_edit = sub.add_parser("edit", help="Редагувати автомобіль")
+    p_edit = sub.add_parser("edit", help="Редагувати автомобіль (введіть: Марка, модель, рік, ціна, пробіг)")
     p_edit.add_argument("number", type=int, help="Номер автомобіля")
     p_edit.add_argument("data", nargs="+", help="Нові дані автомобіля")
 
@@ -65,6 +68,8 @@ def build_parser():
     sub.add_parser("clear", help="Видалити всі автомобілі")
     sub.add_parser("help", help="Список команд")
     sub.add_parser("repl", help="Почати діалог")
+    sub.add_parser("backup", help ="Створити резервну копію")
+    sub.add_parser("repl", help="Запустити діалог")
 
     return parser
 
@@ -122,6 +127,89 @@ def run_from_args(args):
 
     elif args.command == "help":
         commands.dispatch(cars, "help")
+
+@click.group(help = "Те саме через click")
+def click_cli():
+    pass
+
+@click.cli.command("show")
+def click_show():
+    commands.dispatch(functions.get_cars(), "show")
+
+@click_cli.command("add")
+@click.argument("text", nargs = 1, required = True)
+def click_add(text):
+    text = " ".join(text)
+    commands.dispatch(functions.get_cars(), f"add {text}")
+
+@click_cli.command("edit")
+@click.argument("number", type=int)
+def click_edit(number):
+    commands.dispatch(functions.get_cars(), f"edit {number}")
+
+@click_cli.command("delete")
+@click.argument("number", type=int)
+def click_delete(number):
+    commands.dispatch(functions.get_cars(), f"delete {number}")
+
+@click_cli.command("search")
+@click.argument("brand", type=str)
+def click_search(brand):
+    commands.dispatch(functions.get_cars(), f"search {brand}")
+
+@click_cli.command("sold")
+@click.argument("number", type=int)
+def cli_sold(number):
+    commands.dispatch(functions.get_cars(), f"sold {number}")
+
+@click_cli.command("filter")
+@click.argument("choice", type=click.Choice(["1", "2"]))
+def cli_filter(choice):
+    commands.dispatch(functions.get_cars(), f"filter {choice}")
+
+@click_cli.command("info")
+@click.argument("number", type=int)
+def click_info(number):
+    commands.dispatch(functions.get_cars(), f"info {number}")
+
+@click_cli.command("range")
+@click.argument("low", type=int)
+def click_info(low, high):
+    commands.dispatch(functions.get_cars(), f"range {low} {high}")
+
+@click_cli.command("discount")
+@click.argument("number", type=int)
+@click.argument("percent", type=int)
+def click_discount(number, percent):
+    commands.dispatch(functions.get_cars(), f"discount {number} {percent}")
+
+@click_cli.command("sort")
+def click_sort():
+    commands.dispatch(functions.get_cars(), "sort")
+
+@click_cli.command("brands")
+def click_brands():
+    commands.dispatch(functions.get_cars(), "brands")
+
+@click_cli.command("stats")
+def click_stats():
+    commands.dispatch(functions.get_cars(), "stats")
+
+@click_cli.command("clear")
+def click_clear():
+    commands.dispatch(functions.get_cars(), "clear")
+
+@click_cli.command("help")
+def click_help():
+    commands.dispatch(functions.get_cars(), "help")
+
+@click_cli.command("backup")
+def click_bacup():
+    commands.dispatch(functions.get_cars(), "bacup")
+
+@click_cli.command("repl")
+def click_repl():
+    repl()
 
 
 def main():

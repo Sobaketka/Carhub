@@ -34,7 +34,7 @@ def do_add(cars, argument):
             "mileage": int(data[4]),
             "sold": False
         }
-        cars.add_car(cars, car)
+        core.add_car(cars, car)
         print("Машину додано")
     else:
         print("Неправильні дані")
