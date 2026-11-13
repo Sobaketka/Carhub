@@ -206,10 +206,81 @@ def click_help():
 
 @click_cli.command("backup")
 def click_bacup():
-    commands.dispatch(functions.get_cars(), "bacup")
+    commands.dispatch(functions.get_cars(), "backup")
 
 @click_cli.command("repl")
 def click_repl():
+    repl()
+
+typer_app = typer.Typer(help = "Те саме через Typer")
+
+@typer_app.command("show")
+def typer_show():
+    commands.dispatch(functions.get_cars(), "show")
+
+@typer_app.command("add")
+def typer_add(text: list[str]):
+    text = " ".join(text)
+    commands.dispatch(functions.get_cars(), "add")
+
+@typer_app.command("edit")
+def typer_edit(number: int):
+    commands.dispatch(functions.get_cars(), f"edit {number}")
+
+@typer_app.command("delete")
+def typer_delete(number: int):
+    commands.dispatch(functions.get_cars(), f"delete {number}")
+
+@typer_app.command("search")
+def typer_search(brand: str):
+    commands.dispatch(functions.get_cars(), f"search {brand}")
+
+@typer_app.command("sold")
+def typer_sold(number: int):
+    commands.dispatch(functions.get_cars(), f"sold {number}")
+
+@typer_app.command("filter")
+def typer_filter(choice: str):
+    commands.dispatch(functions.get_cars(), f"filter {choice}")
+
+@typer_app.command("info")
+def typer_info(number: int):
+    commands.dispatch(functions.get_cars(), f"info {number}")
+
+@typer_app.command("range")
+def typer_info(low: int, high: int):
+    commands.dispatch(functions.get_cars(), f"range {low} {high}")
+
+@typer_app.command("discount")
+def typer_info(number: int, percent: int):
+    commands.dispatch(functions.get_cars(), f"discount {number} {percent}")
+
+@typer_app.command("sort")
+def typer_sort():
+    commands.dispatch(functions.get_cars(), "sort")
+
+@typer_app.command("brands")
+def typer_brands():
+    commands.dispatch(functions.get_cars(), "brands")
+
+@typer_app.command("stats")
+def typer_stats():
+    commands.dispatch(functions.get_cars(), "stats")
+
+@typer_app.command("clear")
+def typer_clear():
+    commands.dispatch(functions.get_cars(), "clear")
+
+@typer_app.command("help")
+def typer_help():
+    commands.dispatch(functions.get_cars(), "help")
+
+@typer_app.command("backup")
+def typer_bacup():
+    commands.dispatch(functions.get_cars(), "backup")
+
+@typer_app.command("repl")
+def typer_repl():
     repl()
 
 
@@ -222,6 +293,14 @@ def main():
 
     if len(sys.argv) == 1:
         repl()
+        return
+
+    if sys.argv[1] == "click":
+        click_cli(args = sys.argv[2:], prog_name = "python interdod1.py click")
+        return
+
+    if sys.argv[1] == "typer":
+        typer_app(args = sys.argv[2:], prog_name = "python interdod1.py typer")
         return
 
     parser = build_parser()
