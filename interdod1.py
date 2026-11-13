@@ -132,7 +132,8 @@ def run_from_args(args):
 def click_cli():
     pass
 
-@click.cli.command("show")
+@click_cli.command("show")
+@click.argument("number", type=int)
 def click_show():
     commands.dispatch(functions.get_cars(), "show")
 
