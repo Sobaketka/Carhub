@@ -1,10 +1,26 @@
 [
     {
+        "brand": "Audi",
+        "model": "R6",
+        "year": 2018,
+        "price": 42845,
+        "mileage": 48900,
+        "sold": false
+    },
+    {
         "brand": "Toyota",
         "model": "Supra",
         "year": 2020,
         "price": 47000,
         "mileage": 29000,
+        "sold": false
+    },
+    {
+        "brand": "BMW",
+        "model": "M5",
+        "year": 2020,
+        "price": 52430,
+        "mileage": 46000,
         "sold": false
     },
     {
@@ -32,27 +48,19 @@
         "sold": false
     },
     {
-        "brand": "BMW",
-        "model": "M5",
-        "year": 2020,
-        "price": 74900,
-        "mileage": 46000,
-        "sold": false
-    },
-    {
         "brand": "Chevrolet",
         "model": "Camaro",
         "year": 2024,
         "price": 81000,
         "mileage": 2900,
-        "sold": false
+        "sold": true
     },
     {
-        "brand": "Audi",
-        "model": "R6",
-        "year": 2018,
-        "price": 45100,
-        "mileage": 48900,
+        "brand": "BMW",
+        "model": "M5",
+        "year": 2020,
+        "price": 85000,
+        "mileage": 49000,
         "sold": false
     }
 ]

@@ -21,7 +21,7 @@ def delete_car(cars, number):
     if number < 1 or number > len(cars):
         raise IndexError
     cars.pop(number - 1)
-    functions.write_carss(cars)
+    functions.write_cars(cars)
 
 
 def change_sold(cars, number):
@@ -30,10 +30,9 @@ def change_sold(cars, number):
     cars[number - 1]["sold"] = not cars[number - 1]["sold"]
     functions.write_cars(cars)
 
-
-def clear_todos(cars):
+def clear_cars(cars):
     cars.clear()
-    functions.write_todos(cars)
+    functions.write_cars(cars)
 
 
 def backup_todos(filepath=functions.FILEPATH):

@@ -149,9 +149,6 @@ def do_filter(cars, argument):
     else:
         print("Неправильний вибір")
 
-
-
-
 def do_info(cars, argument):
     if not argument:
         print("Вкажіть номер машини")
