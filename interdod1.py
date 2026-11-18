@@ -214,7 +214,6 @@ def click_backup():
 def click_repl():
     repl()
 
-
 typer_app = typer.Typer(help = "Те саме через Typer")
 
 @typer_app.command("show")
