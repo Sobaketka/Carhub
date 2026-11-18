@@ -62,5 +62,13 @@
         "price": 85000,
         "mileage": 49000,
         "sold": false
+    },
+    {
+        "brand": "Ford",
+        "model": "Mustang",
+        "year": 2008,
+        "price": 34000,
+        "mileage": 92000,
+        "sold": false
     }
 ]

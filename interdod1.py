@@ -128,25 +128,26 @@ def run_from_args(args):
     elif args.command == "help":
         commands.dispatch(cars, "help")
 
-@click.group(help = "Те саме через click")
+@click.group(help="Те саме через Click")
 def click_cli():
     pass
 
 @click_cli.command("show")
-@click.argument("number", type=int)
 def click_show():
     commands.dispatch(functions.get_cars(), "show")
 
 @click_cli.command("add")
-@click.argument("text", nargs = 1, required = True)
+@click.argument("text", nargs=-1, required=True)
 def click_add(text):
     text = " ".join(text)
     commands.dispatch(functions.get_cars(), f"add {text}")
 
 @click_cli.command("edit")
 @click.argument("number", type=int)
-def click_edit(number):
-    commands.dispatch(functions.get_cars(), f"edit {number}")
+@click.argument("data", nargs=-1, required=True)
+def click_edit(number, data):
+    data = " ".join(data)
+    commands.dispatch(functions.get_cars(), f"edit {number} {data}")
 
 @click_cli.command("delete")
 @click.argument("number", type=int)
@@ -160,12 +161,12 @@ def click_search(brand):
 
 @click_cli.command("sold")
 @click.argument("number", type=int)
-def cli_sold(number):
+def click_sold(number):
     commands.dispatch(functions.get_cars(), f"sold {number}")
 
 @click_cli.command("filter")
 @click.argument("choice", type=click.Choice(["1", "2"]))
-def cli_filter(choice):
+def click_filter(choice):
     commands.dispatch(functions.get_cars(), f"filter {choice}")
 
 @click_cli.command("info")
@@ -175,7 +176,8 @@ def click_info(number):
 
 @click_cli.command("range")
 @click.argument("low", type=int)
-def click_info(low, high):
+@click.argument("high", type=int)
+def click_range(low, high):
     commands.dispatch(functions.get_cars(), f"range {low} {high}")
 
 @click_cli.command("discount")
@@ -205,12 +207,13 @@ def click_help():
     commands.dispatch(functions.get_cars(), "help")
 
 @click_cli.command("backup")
-def click_bacup():
+def click_backup():
     commands.dispatch(functions.get_cars(), "backup")
 
 @click_cli.command("repl")
 def click_repl():
     repl()
+
 
 typer_app = typer.Typer(help = "Те саме через Typer")
 
@@ -219,13 +222,17 @@ def typer_show():
     commands.dispatch(functions.get_cars(), "show")
 
 @typer_app.command("add")
-def typer_add(text: list[str]):
+def typer_add(text: list[str] = typer.Argument(..., help="Марка, модель, рік, ціна, пробіг")):
     text = " ".join(text)
-    commands.dispatch(functions.get_cars(), "add")
+    commands.dispatch(functions.get_cars(), f"add {text}")
 
 @typer_app.command("edit")
-def typer_edit(number: int):
-    commands.dispatch(functions.get_cars(), f"edit {number}")
+def typer_edit(
+    number: int,
+    data: list[str] = typer.Argument(..., help="Нові дані автомобіля"),
+):
+    data = " ".join(data)
+    commands.dispatch(functions.get_cars(), f"edit {number} {data}")
 
 @typer_app.command("delete")
 def typer_delete(number: int):
@@ -241,6 +248,8 @@ def typer_sold(number: int):
 
 @typer_app.command("filter")
 def typer_filter(choice: str):
+    if choice not in ("1", "2"):
+        raise typer.BadParameter("Оберіть 1 або 2")
     commands.dispatch(functions.get_cars(), f"filter {choice}")
 
 @typer_app.command("info")
@@ -248,11 +257,11 @@ def typer_info(number: int):
     commands.dispatch(functions.get_cars(), f"info {number}")
 
 @typer_app.command("range")
-def typer_info(low: int, high: int):
+def typer_range(low: int, high: int):
     commands.dispatch(functions.get_cars(), f"range {low} {high}")
 
 @typer_app.command("discount")
-def typer_info(number: int, percent: int):
+def typer_discount(number: int, percent: int):
     commands.dispatch(functions.get_cars(), f"discount {number} {percent}")
 
 @typer_app.command("sort")
@@ -276,7 +285,7 @@ def typer_help():
     commands.dispatch(functions.get_cars(), "help")
 
 @typer_app.command("backup")
-def typer_bacup():
+def typer_backup():
     commands.dispatch(functions.get_cars(), "backup")
 
 @typer_app.command("repl")
