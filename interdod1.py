@@ -316,7 +316,6 @@ def main():
     args = parser.parse_args()
     run_from_args(args)
 
-
 if __name__ == "__main__":
     main()
     print("Кінець!")
